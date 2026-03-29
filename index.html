@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nischal Subedi — Statistics & ML Research</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf9f7;
+    --ink: #1a1714;
+    --muted: #6b6460;
+    --accent: #c94f2c;
+    --accent2: #2c6ec9;
+    --rule: #e2ddd8;
+    --card: #ffffff;
+    --tag-bg: #f0ece7;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 15.5px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(250,249,247,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ── LAYOUT ── */
+  .page { max-width: 900px; margin: 0 auto; padding: 0 2rem; }
+
+  section { padding: 5rem 0; border-bottom: 1px solid var(--rule); }
+  section:last-child { border-bottom: none; }
+
+  /* ── HERO ── */
+  #hero {
+    padding-top: 7rem;
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    gap: 3rem;
+    align-items: start;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 4rem;
+  }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.1s ease forwards;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 3.2rem;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.6rem;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.2s ease forwards;
+  }
+
+  .hero-title {
+    font-size: 1rem;
+    color: var(--muted);
+    font-weight: 400;
+    margin-bottom: 1.4rem;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.3s ease forwards;
+  }
+
+  .hero-desc {
+    max-width: 560px;
+    color: var(--muted);
+    line-height: 1.75;
+    font-size: 0.95rem;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.4s ease forwards;
+  }
+
+  .hero-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.8rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.5s ease forwards;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.1rem;
+    border-radius: 4px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover { background: #b04226; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(201,79,44,0.3); }
+
+  .btn-ghost {
+    border: 1px solid var(--rule);
+    color: var(--muted);
+    background: white;
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+
+  .avatar-wrap {
+    opacity: 0;
+    animation: fadeIn 0.8s 0.3s ease forwards;
+  }
+
+  .avatar-box {
+    width: 190px;
+    height: 220px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #e8e2da 0%, #d5cdc4 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--rule);
+    font-size: 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .avatar-box::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 8px,
+      rgba(255,255,255,0.04) 8px,
+      rgba(255,255,255,0.04) 9px
+    );
+  }
+
+  .avatar-initials {
+    font-family: 'DM Serif Display', serif;
+    font-size: 4rem;
+    color: rgba(26,23,20,0.2);
+    letter-spacing: -0.05em;
+    z-index: 1;
+  }
+
+  .contact-strip {
+    margin-top: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .contact-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .contact-item:hover { color: var(--accent); }
+
+  /* ── SECTION HEADERS ── */
+  .sec-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .sec-label::after {
+    content: '';
+    display: block;
+    height: 1px;
+    flex: 1;
+    background: var(--rule);
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 2rem;
+  }
+
+  /* ── NEWS / HIGHLIGHTS ── */
+  .news-list { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .news-item {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 1.2rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .news-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    padding-top: 0.1rem;
+  }
+
+  .news-text { font-size: 0.9rem; color: var(--ink); line-height: 1.6; }
+  .news-text strong { color: var(--accent); font-weight: 600; }
+  .news-text a { color: var(--accent2); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+  .news-text a:hover { border-color: var(--accent2); }
+
+  /* ── RESEARCH / PAPERS ── */
+  .paper-list { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .paper {
+    padding: 1.4rem 1.6rem;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .paper:hover {
+    border-color: var(--accent);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    transform: translateY(-2px);
+  }
+
+  .paper-venue {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .paper-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+  }
+
+  .paper-authors {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .paper-authors strong { color: var(--ink); font-weight: 600; }
+
+  .paper-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 0.7rem;
+  }
+
+  .tag-row { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+
+  .tag {
+    padding: 0.2rem 0.65rem;
+    background: var(--tag-bg);
+    border-radius: 3px;
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .tag-hot { background: rgba(201,79,44,0.1); color: var(--accent); }
+  .tag-cool { background: rgba(44,110,201,0.1); color: var(--accent2); }
+
+  /* ── EXPERIENCE ── */
+  .exp-list { display: flex; flex-direction: column; gap: 0; }
+
+  .exp-item {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 2rem;
+    padding: 1.8rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .exp-item:last-child { border-bottom: none; }
+
+  .exp-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    line-height: 1.6;
+    padding-top: 0.15rem;
+  }
+
+  .exp-org {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    margin-bottom: 0.1rem;
+  }
+
+  .exp-role {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 0.6rem;
+    color: var(--ink);
+  }
+
+  .exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.35rem; }
+
+  .exp-bullets li {
+    font-size: 0.88rem;
+    color: var(--muted);
+    padding-left: 1.1rem;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .exp-bullets li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.8rem;
+  }
+
+  /* ── PUBS ── */
+  .pub-list { display: flex; flex-direction: column; gap: 1rem; }
+
+  .pub-item {
+    padding: 1rem 1.2rem;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 4px 4px 0;
+    transition: transform 0.2s;
+  }
+
+  .pub-item:hover { transform: translateX(4px); }
+
+  .pub-venue-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    background: var(--accent);
+    color: white;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.4rem;
+  }
+
+  .pub-title {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.2rem;
+    line-height: 1.45;
+  }
+
+  .pub-meta {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  /* ── SKILLS GRID ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .skill-cell {
+    background: var(--card);
+    padding: 1.2rem 1.4rem;
+    transition: background 0.2s;
+  }
+
+  .skill-cell:hover { background: var(--tag-bg); }
+
+  .skill-cell-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+
+  .skill-pill {
+    font-size: 0.73rem;
+    padding: 0.18rem 0.55rem;
+    background: var(--tag-bg);
+    border-radius: 2px;
+    color: var(--muted);
+  }
+
+  /* ── AWARDS ── */
+  .award-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .award-item {
+    padding: 1rem 1.2rem;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    transition: border-color 0.2s;
+  }
+
+  .award-item:hover { border-color: var(--accent); }
+
+  .award-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+  .award-text { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+  .award-text strong { display: block; color: var(--ink); font-size: 0.88rem; margin-bottom: 0.1rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 3rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 680px) {
+    #hero { grid-template-columns: 1fr; }
+    .avatar-wrap { order: -1; }
+    .avatar-box { width: 120px; height: 140px; }
+    h1 { font-size: 2.2rem; }
+    .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+    .award-grid { grid-template-columns: 1fr; }
+    .nav-links { gap: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">NS</a>
+  <ul class="nav-links">
+    <li><a href="#news">News</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#pubs">Publications</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#awards">Awards</a></li>
+  </ul>
+</nav>
+
+<main class="page">
+
+  <!-- ── HERO ── -->
+  <section id="hero">
+    <div>
+      <div class="hero-eyebrow">PhD Researcher · Statistics & AI</div>
+      <h1>Nischal<br>Subedi</h1>
+      <p class="hero-title">University of Delaware · Applied Economics & Statistics</p>
+      <p class="hero-desc">
+        I develop robust and scalable methods for adapting and evaluating large language models, with emphasis on <strong>parameter-efficient fine-tuning</strong>, <strong>retrieval augmentation</strong>, and <strong>performance under low-resource conditions</strong>. My work sits at the intersection of statistical learning theory and modern NLP systems.
+      </p>
+      <div class="hero-links">
+        <a href="mailto:nsubedi@udel.edu" class="btn btn-primary">✉ Email Me</a>
+        <a href="https://datascientistinsights.substack.com" class="btn btn-ghost" target="_blank">✍ Substack</a>
+        <a href="#research" class="btn btn-ghost">→ Research</a>
+      </div>
+    </div>
+    <div class="avatar-wrap">
+      <div class="avatar-box">
+        <span class="avatar-initials">NS</span>
+      </div>
+      <div class="contact-strip">
+        <a href="mailto:nsubedi@udel.edu" class="contact-item">nsubedi@udel.edu</a>
+        <span class="contact-item">(302) 607-8726</span>
+        <span class="contact-item">Newark, DE 19711</span>
+        <span class="contact-item">GStat · ASA · MAA</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── NEWS ── -->
+  <section id="news">
+    <div class="sec-label">Latest</div>
+    <h2>News</h2>
+    <div class="news-list">
+      <div class="news-item">
+        <span class="news-date">2026</span>
+        <span class="news-text"><strong>NeurIPS submission</strong> in preparation — "When Does Subspace Direction Matter for LoRA? Regime Analysis of the Magnitude Principle in Few-Shot Adaptation." Introducing PivotLoRA and a regime boundary at d/n ≈ 10.</span>
+      </div>
+      <div class="news-item">
+        <span class="news-date">Nov 2025</span>
+        <span class="news-text">Article published in <strong>ACM Interactions Magazine</strong> — "Empowering Tenants and Landlords Through Conversational AI for Housing Rights."</span>
+      </div>
+      <div class="news-item">
+        <span class="news-date">Aug 2025</span>
+        <span class="news-text">Paper published in <strong>Urban Findings</strong> — "A Proactive Framework for Identifying At-Risk Affordable Housing in High-Pressure Markets."</span>
+      </div>
+      <div class="news-item">
+        <span class="news-date">Jun 2025</span>
+        <span class="news-text">Featured in <a href="#pubs">Shelterforce Magazine</a> — Landlord-Tenant Rights AI Assistant highlighted as a tool for tenant advocacy.</span>
+      </div>
+      <div class="news-item">
+        <span class="news-date">Aug 2025</span>
+        <span class="news-text">Started <strong>PhD in Statistics & Data Science</strong> at University of Delaware under Dr. Cencheng Shen. Enrolled as Research Assistant.</span>
+      </div>
+      <div class="news-item">
+        <span class="news-date">Feb 2025</span>
+        <span class="news-text">Earned <strong>Graduate Statistician (GStat)</strong> designation from the American Statistical Association.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RESEARCH ── -->
+  <section id="research">
+    <div class="sec-label">Work</div>
+    <h2>Research</h2>
+    <div class="paper-list">
+
+      <div class="paper">
+        <div class="paper-venue">NeurIPS 2026 (in prep) · PEFT / LoRA</div>
+        <div class="paper-title">When Does Subspace Direction Matter for LoRA? Regime Analysis of the Magnitude Principle in Few-Shot Adaptation</div>
+        <div class="paper-authors"><strong>Nischal Subedi</strong>, Cencheng Shen</div>
+        <div class="paper-desc">
+          We challenge the dominant "magnitude principle" in LoRA initialization and show that subspace <em>direction</em> — not magnitude — governs adaptation quality when d/n > 10. We introduce a regime boundary framework supported by Random Matrix Theory, an ablation ladder (EigenLoRA → LDA-LoRA → PivotLoRA), and empirical validation across 30 BERT settings and Llama-3.1-8B.
+        </div>
+        <div class="tag-row">
+          <span class="tag tag-hot">PivotLoRA</span>
+          <span class="tag tag-hot">Few-Shot</span>
+          <span class="tag tag-cool">Random Matrix Theory</span>
+          <span class="tag">BERT</span>
+          <span class="tag">Llama-3.1-8B</span>
+          <span class="tag">PEFT</span>
+        </div>
+      </div>
+
+      <div class="paper">
+        <div class="paper-venue">SIGIR 2026 (submitted) · Information Retrieval</div>
+        <div class="paper-title">AgreRank: Consensus-Anchored Expansion for Noise-Resilient Re-ranking</div>
+        <div class="paper-authors"><strong>Nischal Subedi</strong>, Cencheng Shen</div>
+        <div class="paper-desc">
+          AgreRank fuses sparse (BM25) and dense retrieval signals via percentile normalization and geometric gating to form a consensus seed set. This reduces semantic drift and improves nDCG@10 by up to 5.7% over RRF+CE baselines on TREC Deep Learning benchmarks. We evaluate across BGE, E5, and multiple reranker architectures.
+        </div>
+        <div class="tag-row">
+          <span class="tag tag-hot">nDCG@10 +5.7%</span>
+          <span class="tag tag-cool">Hybrid Retrieval</span>
+          <span class="tag">BM25</span>
+          <span class="tag">Dense Retrieval</span>
+          <span class="tag">TREC DL</span>
+          <span class="tag">RAG</span>
+        </div>
+      </div>
+
+      <div class="paper">
+        <div class="paper-venue">Data & Policy (under review) · Graph ML / Housing</div>
+        <div class="paper-title">A Graph Neural Network Approach to Physical Distress Screening in Subsidized Housing</div>
+        <div class="paper-authors">Danush Wijekularathna, <strong>Nischal Subedi</strong></div>
+        <div class="paper-desc">
+          We apply Graph Attention Networks to predict physical distress in subsidized housing, incorporating urbanicity stratification and property-level graph structure. This work supports proactive policy interventions in affordable housing preservation.
+        </div>
+        <div class="tag-row">
+          <span class="tag tag-cool">Graph Attention Networks</span>
+          <span class="tag">Housing Policy</span>
+          <span class="tag">GNN</span>
+          <span class="tag">Social Impact</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── PUBLICATIONS ── -->
+  <section id="pubs">
+    <div class="sec-label">Output</div>
+    <h2>Publications & Features</h2>
+    <div class="pub-list">
+
+      <div class="pub-item">
+        <span class="pub-venue-badge">Urban Findings 2025</span>
+        <div class="pub-title">A Proactive Framework for Identifying At-Risk Affordable Housing in High-Pressure Markets</div>
+        <div class="pub-meta">Subedi, N. — Urban Findings, 143619. August 2025.</div>
+      </div>
+
+      <div class="pub-item">
+        <span class="pub-venue-badge">ACM Interactions 2025</span>
+        <div class="pub-title">Empowering Tenants and Landlords Through Conversational AI for Housing Rights</div>
+        <div class="pub-meta">Subedi, N. — ACM Interactions Magazine. November/December 2025.</div>
+      </div>
+
+      <div class="pub-item">
+        <span class="pub-venue-badge">Shelterforce 2025</span>
+        <div class="pub-title">Tech Tools Help Tenants Push Back Against Problematic Landlords</div>
+        <div class="pub-meta">Feature article on the Landlord-Tenant Rights Assistant. June 2025.</div>
+      </div>
+
+      <div class="pub-item">
+        <span class="pub-venue-badge">NC J. Math & Stats 2019</span>
+        <div class="pub-title">Implementing the Lifetime Performance Index with a Two-Parameter Rayleigh Distribution Under Progressive Type II Censoring</div>
+        <div class="pub-meta">Wijekularathna, D. K., & Subedi, N. — NCJMS, Vol. 5, pp. 28–40. May 2019.</div>
+      </div>
+
+      <div class="pub-item" style="border-left-color: var(--accent2);">
+        <span class="pub-venue-badge" style="background: var(--accent2);">MAA MathFest 2018</span>
+        <div class="pub-title">Harmonious Labeling and Graphs</div>
+        <div class="pub-meta">Kenneth, R., Subedi, N. — Presented at MAA MathFest, Denver, CO. August 2018.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── EXPERIENCE ── -->
+  <section id="experience">
+    <div class="sec-label">Career</div>
+    <h2>Experience</h2>
+    <div class="exp-list">
+
+      <div class="exp-item">
+        <div class="exp-meta">Aug 2025<br>– Present</div>
+        <div>
+          <div class="exp-org">University of Delaware</div>
+          <div class="exp-role">Research Assistant</div>
+          <ul class="exp-bullets">
+            <li>Building AgreRank, a consensus-based hybrid retrieval framework; evaluated on TREC Deep Learning benchmarks.</li>
+            <li>Designing and benchmarking LoRA variants (EigenLoRA, LDA-LoRA, PivotLoRA) across GLUE and SQuAD under few-shot conditions.</li>
+            <li>Studying the statistical geometry of high-dimensional LLM embedding spaces using Random Matrix Theory.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-meta">Jul 2024<br>– Jun 2025</div>
+        <div>
+          <div class="exp-org">Open Avenues</div>
+          <div class="exp-role">Data Science Fellow</div>
+          <ul class="exp-bullets">
+            <li>Directed a course on housing price prediction using XGBoost, covering EDA, feature engineering, and AWS SageMaker deployment with SHAP interpretation.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-meta">Jul 2021<br>– Apr 2025</div>
+        <div>
+          <div class="exp-org">Home Partners of America</div>
+          <div class="exp-role">Data Scientist</div>
+          <ul class="exp-bullets">
+            <li>Built a dynamic pricing system using survival models, increasing leasing rates by 20% and reducing review time by 50%.</li>
+            <li>Implemented a sentiment classifier with map visualization on AWS QuickSight, boosting CSAT scores by 35%.</li>
+            <li>Developed a market monitoring system using web scrapers and MLS data to inform regional leasing strategies.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-meta">Jun 2020<br>– May 2021</div>
+        <div>
+          <div class="exp-org">Barclays Bank</div>
+          <div class="exp-role">Risk Analyst</div>
+          <ul class="exp-bullets">
+            <li>Maintained a logistic regression model for high-risk account prediction; monitored data drift for compliance-aligned accuracy.</li>
+            <li>Automated Python reporting scripts, reducing manual effort by 40%.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-meta">May 2018<br>– Aug 2018</div>
+        <div>
+          <div class="exp-org">Auburn University</div>
+          <div class="exp-role">Summer Research Intern</div>
+          <ul class="exp-bullets">
+            <li>Developed harmonious labeling algorithms for planar graphs (even/odd paths). Presented results at MAA MathFest 2018.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── SKILLS ── -->
+  <section id="skills">
+    <div class="sec-label">Toolkit</div>
+    <h2>Technical Skills</h2>
+    <div class="skills-grid">
+      <div class="skill-cell">
+        <div class="skill-cell-label">Languages</div>
+        <div class="skill-tags">
+          <span class="skill-pill">Python</span>
+          <span class="skill-pill">R</span>
+          <span class="skill-pill">C++</span>
+          <span class="skill-pill">SQL</span>
+          <span class="skill-pill">SAS</span>
+        </div>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-cell-label">ML / DL</div>
+        <div class="skill-tags">
+          <span class="skill-pill">PyTorch</span>
+          <span class="skill-pill">HuggingFace</span>
+          <span class="skill-pill">TensorFlow</span>
+          <span class="skill-pill">scikit-learn</span>
+          <span class="skill-pill">XGBoost</span>
+        </div>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-cell-label">LLMs & NLP</div>
+        <div class="skill-tags">
+          <span class="skill-pill">LoRA / PEFT</span>
+          <span class="skill-pill">LangChain</span>
+          <span class="skill-pill">LangGraph</span>
+          <span class="skill-pill">T5</span>
+          <span class="skill-pill">BERT</span>
+        </div>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-cell-label">Cloud & DevOps</div>
+        <div class="skill-tags">
+          <span class="skill-pill">AWS SageMaker</span>
+          <span class="skill-pill">EC2 / S3</span>
+          <span class="skill-pill">Docker</span>
+          <span class="skill-pill">Git</span>
+          <span class="skill-pill">MLflow</span>
+        </div>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-cell-label">Search & Data</div>
+        <div class="skill-tags">
+          <span class="skill-pill">Elasticsearch</span>
+          <span class="skill-pill">Pinecone</span>
+          <span class="skill-pill">Hadoop</span>
+          <span class="skill-pill">Spark</span>
+          <span class="skill-pill">BigQuery</span>
+        </div>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-cell-label">Statistics</div>
+        <div class="skill-tags">
+          <span class="skill-pill">RMT</span>
+          <span class="skill-pill">Survival Analysis</span>
+          <span class="skill-pill">ANOVA</span>
+          <span class="skill-pill">SHAP</span>
+          <span class="skill-pill">A/B Testing</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── AWARDS ── -->
+  <section id="awards">
+    <div class="sec-label">Recognition</div>
+    <h2>Awards & Certifications</h2>
+    <div class="award-grid">
+      <div class="award-item">
+        <span class="award-icon">🎓</span>
+        <div class="award-text">
+          <strong>Graduate Assistantship</strong>
+          University of Delaware, 2019
+        </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🏆</span>
+        <div class="award-text">
+          <strong>Chancellor's Award — Full Tuition Scholarship</strong>
+          Troy University, 2015–2019
+        </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">☁️</span>
+        <div class="award-text">
+          <strong>AWS Certified Machine Learning</strong>
+          Dec 2024
+        </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">🧠</span>
+        <div class="award-text">
+          <strong>Deep Learning Specialization</strong>
+          Coursera / DeepLearning.AI, June 2025
+        </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">📊</span>
+        <div class="award-text">
+          <strong>SAS Certified Statistical Business Analyst</strong>
+          Regression & Modeling, 2021
+        </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">📐</span>
+        <div class="award-text">
+          <strong>Society of Actuaries — Exam P</strong>
+          Sep 2018
+        </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">Σ</span>
+        <div class="award-text">
+          <strong>Pi Mu Epsilon Honor Society</strong>
+          Inducted 2018
+        </div>
+      </div>
+      <div class="award-item">
+        <span class="award-icon">⭐</span>
+        <div class="award-text">
+          <strong>Chancellor's List (6×) · Dean's List (1×)</strong>
+          Troy University
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="page">
+    <p>Nischal Subedi · PhD Student, Statistics & Data Science · University of Delaware</p>
+    <p style="margin-top:0.4rem">
+      <a href="mailto:nsubedi@udel.edu">nsubedi@udel.edu</a> ·
+      <a href="https://datascientistinsights.substack.com" target="_blank">Substack</a> ·
+      Newark, DE
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
